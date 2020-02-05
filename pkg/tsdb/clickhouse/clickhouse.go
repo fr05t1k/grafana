@@ -62,9 +62,16 @@ func (e *Clickhouse) executeQuery(query *tsdb.Query, timeRange *tsdb.TimeRange) 
 	params := url.Values{}
 	params.Add("query", fmt.Sprintf("%s FORMAT JSON", queryString))
 
+	e.log.Info(fmt.Sprintf("Pass: %s Access: %v", e.DataSource.BasicAuthPassword, e.DataSource.SecureJsonData.Decrypt()["basicAuthPassword"]))
+
 	if e.DataSource.BasicAuth {
+		basicAuthPassword, exist := e.DataSource.SecureJsonData.DecryptedValue("basicAuthPassword")
+		if !exist {
+			queryResult.Error = errors.Wrap(err, "Cannot find basic auth password")
+			return queryResult
+		}
 		params.Add("user", e.DataSource.BasicAuthUser)
-		params.Add("password", e.DataSource.BasicAuthPassword)
+		params.Add("password", basicAuthPassword)
 	}
 
 	response, err := http.Get(fmt.Sprintf("%s?%s", e.DataSource.Url, params.Encode()))
