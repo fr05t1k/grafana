@@ -20,6 +20,7 @@ import (
 	_ "github.com/grafana/grafana/pkg/services/alerting/notifiers"
 	"github.com/grafana/grafana/pkg/setting"
 	_ "github.com/grafana/grafana/pkg/tsdb/azuremonitor"
+	_ "github.com/grafana/grafana/pkg/tsdb/clickhouse"
 	_ "github.com/grafana/grafana/pkg/tsdb/cloudwatch"
 	_ "github.com/grafana/grafana/pkg/tsdb/elasticsearch"
 	_ "github.com/grafana/grafana/pkg/tsdb/graphite"
